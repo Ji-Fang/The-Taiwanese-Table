@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'sassc-rails'
+gem "sassc-rails"
 
 gem "font-awesome-sass"
 
