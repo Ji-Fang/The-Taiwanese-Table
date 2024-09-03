@@ -1,0 +1,80 @@
+<header class="site-header">
+  <div class="header-container">
+    <div class="header-logo-search">
+      <div class="header-logo">
+        <%= image_tag "logo.png", alt: "The Taiwanese Table Logo", class: "logo-image" %>
+        <h1 class="site-title">The Taiwanese Table</h1>
+      </div>
+      <div class="header-search">
+        <%= form_with url: posts_path, method: :get, local: true, class: 'search-form' do %>
+          <%= text_field_tag :q, params[:q], placeholder: "Search recipes...", class: 'search-input' %>
+        <% end %>
+        <i class="fa-regular fa-bookmark"></i>
+        <%= link_to 'Favorites', '#', class: 'favorites-link' %> <!-- Update with appropriate path -->
+      </div>
+    </div>
+    <nav class="main-nav">
+      <ul class="nav-links">
+        <li><%= link_to "Home", root_path, class: "nav-link" %></li>
+        <li><%= link_to "Categories", categories_path, class: "nav-link" %></li>
+        <li><%= link_to "Recipes", posts_path, class: "nav-link" %></li>
+        <li><%= link_to "Contact", "#", class: "nav-link" %></li> <!-- Update with appropriate path -->
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="featured-recipes">
+    <div class="container">
+      <% @featured_posts.each do |post| %>
+        <div class="recipe-item">
+          <%= image_tag post.images.first.url, alt: post.title %>
+          <div class="recipe-info">
+            <% if post.featured? %>
+              <span class="badge">Featured</span>
+            <% end %>
+            <h2><%= link_to post.title, post_path(post) %></h2>
+            <p><%= truncate(post.content, length: 100) %></p>
+            <p class="recipe-meta"><%= post.created_at.strftime('%B %d, %Y') %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="container">
+      <ul class="category-lists">
+        <li><%= link_to "Home", root_path, class: "category-list" %></li>
+        <li><%= link_to "Categories", categories_path, class: "category-list" %></li>
+        <li><%= link_to "Recipes", posts_path, class: "category-list" %></li>
+        <li><%= link_to "Contact", "#", class: "category-list" %></li> <!-- Update with appropriate path -->
+      </ul>
+    </div>
+  </section>
+
+  <section class="popular-recipes">
+    <div class="container">
+      <div class="recipe-list">
+        <h2>Popular Recipes</h2>
+        <ul>
+          <% @popular_posts.each do |post| %>
+            <li><%= link_to post.title, post_path(post) %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="new-cookbook">
+        <h2>New Cookbook</h2>
+        <%# <%= image_tag 'cookbook.jpg', alt: "Friday Night Feast" %>
+        <p>Friday Night Feast with Maggy Brown</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2024 The Taiwanese Table. All rights reserved.</p>
+  </div>
+</footer>
