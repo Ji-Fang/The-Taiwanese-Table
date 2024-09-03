@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   def index
-    @featured_posts = Post.where(featured: true).limit(3)
+    @featured_posts = Post.featured.limit(3)
     @categories = Category.all
     @popular_posts = Post.order(views_count: :desc).limit(4)
   end
@@ -45,6 +45,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :content, :category_id, :youtube_video, :featured, :views_count, images: [])
+    params.require(:post).permit(:title, :content, :category_id, :youtube_url, :featured, :views_count, images: [])
   end
 end

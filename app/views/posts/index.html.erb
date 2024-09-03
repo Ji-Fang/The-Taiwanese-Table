@@ -45,15 +45,11 @@
 
   <section class="categories">
     <div class="container">
-      <ul class="category-list">
-        <% @categories.each do |category| %>
-          <li>
-            <%= link_to category_path(category) do %>
-              <%= image_tag category.icon.url, alt: category.name %>
-              <span><%= category.name %></span>
-            <% end %>
-          </li>
-        <% end %>
+      <ul class="category-lists">
+        <li><%= link_to 'Home', root_path, class: 'category-list' %></li>
+        <li><%= link_to 'Categories', categories_path, class: 'category-list' %></li>
+        <li><%= link_to 'Recipes', posts_path, class: 'category-list' %></li>
+        <li><%= link_to 'Contact', '#', class: 'category-list' %></li> <!-- Update with appropriate path -->
       </ul>
     </div>
   </section>

@@ -1,13 +1,17 @@
-require "test_helper"
+require 'test_helper'
 
 class CategoriesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @category = categories(:one) # Define this fixture or create a category object
+  end
+
   test "should get index" do
-    get categories_index_url
+    get categories_url
     assert_response :success
   end
 
-  test "should get show" do
-    get categories_show_url
+  test "should show category" do
+    get category_url(@category)
     assert_response :success
   end
 end
