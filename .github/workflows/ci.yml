@@ -19,6 +19,12 @@ jobs:
           ruby-version: 3.1.2
           bundler-cache: true
 
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
+
       - name: Install dependencies
         run: bundle install --path vendor/bundle
 
@@ -38,6 +44,12 @@ jobs:
           ruby-version: 3.1.2
           bundler-cache: true
 
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
+
       - name: Install dependencies
         run: bundle install --path vendor/bundle
 
@@ -56,6 +68,12 @@ jobs:
         with:
           ruby-version: 3.1.2
           bundler-cache: true
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
 
       - name: Install dependencies
         run: bundle install --path vendor/bundle
@@ -88,6 +106,12 @@ jobs:
         with:
           ruby-version: 3.1.2
           bundler-cache: true
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
 
       - name: Install dependencies
         run: bundle install --path vendor/bundle
