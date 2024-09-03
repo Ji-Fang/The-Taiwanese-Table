@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class CommentsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -7,7 +7,7 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create comment" do
-    post post_comments_url(@post), params: { comment: { body: 'Test comment' } }
+    post post_comments_url(@post), params: { comment: { body: "Test comment" } }
     assert_response :success
   end
 
