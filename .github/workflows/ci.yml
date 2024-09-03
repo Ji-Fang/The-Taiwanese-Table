@@ -16,11 +16,20 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 3.1.2
           bundler-cache: true
 
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.17
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
+
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
+
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+        run: bundle exec bin/brakeman --no-pager
 
   scan_js:
     runs-on: ubuntu-latest
@@ -32,14 +41,24 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 3.1.2
           bundler-cache: true
 
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.17
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
+
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
+
       - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
+        run: bundle exec bin/importmap audit
 
   lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -47,11 +66,20 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 3.1.2
           bundler-cache: true
 
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.17
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
+
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
+
       - name: Lint code for consistent style
-        run: bin/rubocop -f github
+        run: bundle exec bin/rubocop -f github
 
   test:
     runs-on: ubuntu-latest
@@ -66,12 +94,6 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      # redis:
-      #   image: redis
-      #   ports:
-      #     - 6379:6379
-      #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips postgresql-client
@@ -82,15 +104,24 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 3.1.2
           bundler-cache: true
+
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.17
+
+      - name: Configure Bundler
+        run: bundle config set path 'vendor/bundle'
+
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
 
       - name: Run tests
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        run: bundle exec bin/rails db:test:prepare test test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
