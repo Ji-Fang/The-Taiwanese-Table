@@ -1,0 +1,1446 @@
+  [1m[35m (1808.9ms)[0m  [1m[35mCREATE DATABASE "the_taiwanese_table_development" ENCODING = 'unicode'[0m
+  [1m[35m (478.4ms)[0m  [1m[35mCREATE DATABASE "the_taiwanese_table_test" ENCODING = 'unicode'[0m
+  [1m[35m (95.3ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (32.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (23.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (4.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (33.9ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2024-09-03 13:28:46.977368', '2024-09-03 13:28:46.977374') RETURNING "key"[0m
+Migrating to CreatePosts (20240903132720)
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (49.7ms)[0m  [1m[35mCREATE TABLE "posts" ("id" bigserial primary key, "title" character varying, "content" text, "youtube_url" character varying, "saved" boolean, "category_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_9b1b26f040"
+FOREIGN KEY ("category_id")
+  REFERENCES "categories" ("id")
+)[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (25.7ms)[0m  [1m[34mSELECT pg_advisory_unlock(5006824864884655680)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (4.5ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to CreateCategories (20240903132720)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (43.0ms)[0m  [1m[35mCREATE TABLE "categories" ("id" bigserial primary key, "name" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240903132720') RETURNING "version"[0m
+  [1m[36mTRANSACTION (26.4ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePosts (20240903132728)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (17.9ms)[0m  [1m[35mCREATE TABLE "posts" ("id" bigserial primary key, "title" character varying, "content" text, "youtube_url" character varying, "saved" boolean, "category_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_9b1b26f040"
+FOREIGN KEY ("category_id")
+  REFERENCES "categories" ("id")
+)[0m
+  [1m[35m (29.7ms)[0m  [1m[35mCREATE INDEX "index_posts_on_category_id" ON "posts" ("category_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240903132728') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePhotos (20240903132740)
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (33.5ms)[0m  [1m[35mCREATE TABLE "photos" ("id" bigserial primary key, "image_url" character varying, "post_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_94f3e9b7c2"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_photos_on_post_id" ON "photos" ("post_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240903132740') RETURNING "version"[0m
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateComments (20240903132812)
+  [1m[36mTRANSACTION (24.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (34.2ms)[0m  [1m[35mCREATE TABLE "comments" ("id" bigserial primary key, "content" text, "post_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_2fd19c0db7"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240903132812') RETURNING "version"[0m
+  [1m[36mTRANSACTION (25.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/" for 127.0.0.1 at 2024-09-03 15:36:27 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (11.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  Rendered posts/index.html.erb within layouts/application (Duration: 1.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 562.7ms | GC: 118.2ms)
+Completed 200 OK in 766ms (Views: 598.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 131.3ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 15:36:29 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/create" for 127.0.0.1 at 2024-09-03 15:36:59 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/create"):
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 15:37:00 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 15:37:22 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  Rendered posts/index.html.erb within layouts/application (Duration: 1.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 22.3ms | GC: 0.8ms)
+Completed 200 OK in 26ms (Views: 23.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 15:37:25 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  Rendered posts/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 16.4ms | GC: 5.0ms)
+Completed 200 OK in 20ms (Views: 17.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 5.0ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 15:37:25 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 15:45:41 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  Rendered posts/index.html.erb within layouts/application (Duration: 120.5ms | GC: 73.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 121.2ms | GC: 73.2ms)
+Completed 500 Internal Server Error in 447ms (ActiveRecord: 60.7ms (0 queries, 0 cached) | GC: 168.7ms)
+
+
+  
+ActionView::Template::Error (PG::UndefinedColumn: ERROR:  column posts.featured does not exist
+LINE 1: SELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 ...
+                                            ^
+):
+
+Causes:
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column posts.featured does not exist
+LINE 1: SELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 ...
+                                            ^
+)
+PG::UndefinedColumn (ERROR:  column posts.featured does not exist
+LINE 1: SELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 ...
+                                            ^
+)
+    23: <main>
+    24:   <section class="featured-recipes">
+    25:     <div class="container">
+    26:       <% @featured_posts.each do |post| %>
+    27:         <div class="recipe-item">
+    28:           <%= image_tag post.images.first.url, alt: post.title %>
+    29:           <div class="recipe-info">
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 15:45:43 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 15:47:02 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  Rendered posts/index.html.erb within layouts/application (Duration: 2.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.9ms | GC: 0.0ms)
+Completed 500 Internal Server Error in 27ms (ActiveRecord: 8.8ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionView::SyntaxErrorInTemplate (Encountered a syntax error while rendering template: check <header>
+  <div class="container">
+    <div class="logo">
+      <h1>The Taiwanese Table</h1>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><%= link_to 'Home', root_path %></li>
+        <li><%= link_to 'Categories', categories_path %></li>
+        <li><%= link_to 'Recipes', posts_path %></li>
+        <li><%= link_to 'Contact', '#' %></li> <!-- Update with appropriate path -->
+      </ul>
+    </nav>
+    <div class="search-favorites">
+      <%= form_with url: posts_path, method: :get, local: true do %>
+        <%= text_field_tag :q, params[:q], placeholder: "Search recipes..." %>
+      <% end %>
+      <%= link_to 'Favorites', '#' %> <!-- Update with appropriate path -->
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="featured-recipes">
+    <div class="container">
+      <%# <% @featured_posts.each do |post| %>
+        <%# <div class="recipe-item">
+          <%= image_tag post.images.first.url, alt: post.title %>
+          <%# <div class="recipe-info">
+            <% if post.featured? %>
+              <%# <span class="badge">Popular</span>
+            <% end %>
+            <%# <h2><%= link_to post.title, post_path(post) %></h2>
+            <%# <p><%= truncate(post.content, length: 100) %></p>
+            <%# <p class="recipe-meta"><%= post.created_at.strftime('%B %d, %Y') %></p>
+          <%# </div>
+        </div> %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="container">
+      <ul class="category-list">
+        <% @categories.each do |category| %>
+          <li>
+            <%= link_to category_path(category) do %>
+              <%= image_tag category.icon.url, alt: category.name %>
+              <span><%= category.name %></span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </section>
+
+  <section class="popular-recipes">
+    <div class="container">
+      <div class="recipe-list">
+        <h2>Popular Recipes</h2>
+        <ul>
+          <% @popular_posts.each do |post| %>
+            <li><%= link_to post.title, post_path(post) %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="new-cookbook">
+        <h2>New Cookbook</h2>
+        <%= image_tag 'cookbook.jpg', alt: "Friday Night Feast" %>
+        <p>Friday Night Feast with Maggy Brown</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2024 The Taiwanese Table. All rights reserved.</p>
+  </div>
+</footer>
+
+):
+
+Causes:
+ActiveSupport::SyntaxErrorProxy (/Users/jennylo/code/taiwanese_table/the_taiwanese_table/app/views/posts/index.html.erb:83: syntax error, unexpected `end', expecting end-of-input
+          end
+          ^~~
+)
+1:    <header>
+2:      <div class="container">
+3:        <div class="logo">
+4:          <h1>The Taiwanese Table</h1>
+5:        </div>
+6:        <nav>
+7:          <ul class="nav-links">
+8:            <li><%= link_to 'Home', root_path %></li>
+9:            <li><%= link_to 'Categories', categories_path %></li>
+10:            <li><%= link_to 'Recipes', posts_path %></li>
+11:            <li><%= link_to 'Contact', '#' %></li> <!-- Update with appropriate path -->
+12:          </ul>
+13:        </nav>
+14:        <div class="search-favorites">
+15:          <%= form_with url: posts_path, method: :get, local: true do %>
+16:            <%= text_field_tag :q, params[:q], placeholder: "Search recipes..." %>
+17:          <% end %>
+18:          <%= link_to 'Favorites', '#' %> <!-- Update with appropriate path -->
+19:        </div>
+20:      </div>
+21:    </header>
+22:    
+23:    <main>
+24:      <section class="featured-recipes">
+25:        <div class="container">
+26:          <%# <% @featured_posts.each do |post| %>
+27:            <%# <div class="recipe-item">
+28:              <%= image_tag post.images.first.url, alt: post.title %>
+29:              <%# <div class="recipe-info">
+30:                <% if post.featured? %>
+31:                  <%# <span class="badge">Popular</span>
+32:                <% end %>
+33:                <%# <h2><%= link_to post.title, post_path(post) %></h2>
+34:                <%# <p><%= truncate(post.content, length: 100) %></p>
+35:                <%# <p class="recipe-meta"><%= post.created_at.strftime('%B %d, %Y') %></p>
+36:              <%# </div>
+37:            </div> %>
+38:          <% end %>
+39:        </div>
+40:      </section>
+41:    
+42:      <section class="categories">
+43:        <div class="container">
+44:          <ul class="category-list">
+45:            <% @categories.each do |category| %>
+46:              <li>
+47:                <%= link_to category_path(category) do %>
+48:                  <%= image_tag category.icon.url, alt: category.name %>
+49:                  <span><%= category.name %></span>
+50:                <% end %>
+51:              </li>
+52:            <% end %>
+53:          </ul>
+54:        </div>
+55:      </section>
+56:    
+57:      <section class="popular-recipes">
+58:        <div class="container">
+59:          <div class="recipe-list">
+60:            <h2>Popular Recipes</h2>
+61:            <ul>
+62:              <% @popular_posts.each do |post| %>
+63:                <li><%= link_to post.title, post_path(post) %></li>
+64:              <% end %>
+65:            </ul>
+66:          </div>
+67:          <div class="new-cookbook">
+68:            <h2>New Cookbook</h2>
+69:            <%= image_tag 'cookbook.jpg', alt: "Friday Night Feast" %>
+70:            <p>Friday Night Feast with Maggy Brown</p>
+71:          </div>
+72:        </div>
+73:      </section>
+74:    </main>
+75:    
+76:    <footer>
+77:      <div class="container">
+78:        <p>&copy; 2024 The Taiwanese Table. All rights reserved.</p>
+79:      </div>
+80:    </footer>
+  
+app/views/posts/index.html.erb:83: syntax error, unexpected `end', expecting end-of-input
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 15:47:04 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 15:47:23 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mCategory Load (26.6ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:33
+  [1m[36mPost Load (3.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:50
+  Rendered posts/index.html.erb within layouts/application (Duration: 38.2ms | GC: 0.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 39.1ms | GC: 0.7ms)
+Completed 500 Internal Server Error in 54ms (ActiveRecord: 31.1ms (2 queries, 0 cached) | GC: 1.0ms)
+
+
+  
+ActionView::Template::Error (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+):
+
+Causes:
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+PG::UndefinedColumn (ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+    47:       <div class="recipe-list">
+    48:         <h2>Popular Recipes</h2>
+    49:         <ul>
+    50:           <% @popular_posts.each do |post| %>
+    51:             <li><%= link_to post.title, post_path(post) %></li>
+    52:           <% end %>
+    53:         </ul>
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 15:47:24 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 15:47:29 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mCategory Load (14.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:33
+  [1m[36mPost Load (7.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:50
+  Rendered posts/index.html.erb within layouts/application (Duration: 33.7ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 34.7ms | GC: 0.4ms)
+Completed 500 Internal Server Error in 39ms (ActiveRecord: 22.2ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+  
+ActionView::Template::Error (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+):
+
+Causes:
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+PG::UndefinedColumn (ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+    47:       <div class="recipe-list">
+    48:         <h2>Popular Recipes</h2>
+    49:         <ul>
+    50:           <% @popular_posts.each do |post| %>
+    51:             <li><%= link_to post.title, post_path(post) %></li>
+    52:           <% end %>
+    53:         </ul>
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 15:47:29 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 15:55:06 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  Rendered posts/index.html.erb within layouts/application (Duration: 34.4ms | GC: 2.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 35.1ms | GC: 2.0ms)
+Completed 500 Internal Server Error in 153ms (ActiveRecord: 54.1ms (0 queries, 0 cached) | GC: 6.5ms)
+
+
+  
+ActionView::Template::Error (PG::UndefinedColumn: ERROR:  column posts.featured does not exist
+LINE 1: SELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 ...
+                                            ^
+):
+
+Causes:
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column posts.featured does not exist
+LINE 1: SELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 ...
+                                            ^
+)
+PG::UndefinedColumn (ERROR:  column posts.featured does not exist
+LINE 1: SELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 ...
+                                            ^
+)
+    23: <main>
+    24:   <section class="featured-recipes">
+    25:     <div class="container">
+    26:       <% @featured_posts.each do |post| %>
+    27:         <div class="recipe-item">
+    28:           <%= image_tag post.images.first.url, alt: post.title %>
+    29:           <div class="recipe-info">
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 15:55:07 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (15.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.7ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to AddFeaturedToPosts (20240903135916)
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (35.8ms)[0m  [1m[35mALTER TABLE "posts" ADD "featured" boolean[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240903135916') RETURNING "version"[0m
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT pg_advisory_unlock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 15:59:23 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (3.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (0.6ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (3.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 41.2ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 41.7ms | GC: 0.3ms)
+Completed 500 Internal Server Error in 77ms (ActiveRecord: 24.2ms (3 queries, 0 cached) | GC: 0.8ms)
+
+
+  
+ActionView::Template::Error (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+):
+
+Causes:
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+PG::UndefinedColumn (ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+    59:       <div class="recipe-list">
+    60:         <h2>Popular Recipes</h2>
+    61:         <ul>
+    62:           <% @popular_posts.each do |post| %>
+    63:             <li><%= link_to post.title, post_path(post) %></li>
+    64:           <% end %>
+    65:         </ul>
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 15:59:23 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (13.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.5ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:02:39 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (1.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (0.7ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (29.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 39.9ms | GC: 1.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 40.3ms | GC: 1.0ms)
+Completed 500 Internal Server Error in 99ms (ActiveRecord: 33.4ms (3 queries, 0 cached) | GC: 1.6ms)
+
+
+  
+ActionView::Template::Error (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+):
+
+Causes:
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+PG::UndefinedColumn (ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+    59:       <div class="recipe-list">
+    60:         <h2>Popular Recipes</h2>
+    61:         <ul>
+    62:           <% @popular_posts.each do |post| %>
+    63:             <li><%= link_to post.title, post_path(post) %></li>
+    64:           <% end %>
+    65:         </ul>
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:02:40 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[36mActiveRecord::SchemaMigration Load (12.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (11.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mCategory Load (0.6ms)[0m  [1m[34mSELECT "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mCategory Load (0.3ms)[0m  [1m[34mSELECT "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:05:01 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (2.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (0.5ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (7.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 26.3ms | GC: 2.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 27.0ms | GC: 2.5ms)
+Completed 500 Internal Server Error in 64ms (ActiveRecord: 14.0ms (3 queries, 0 cached) | GC: 4.4ms)
+
+
+  
+ActionView::Template::Error (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+):
+
+Causes:
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+PG::UndefinedColumn (ERROR:  column "views_count" does not exist
+LINE 1: SELECT "posts".* FROM "posts" ORDER BY views_count DESC LIMI...
+                                               ^
+)
+    59:       <div class="recipe-list">
+    60:         <h2>Popular Recipes</h2>
+    61:         <ul>
+    62:           <% @popular_posts.each do |post| %>
+    63:             <li><%= link_to post.title, post_path(post) %></li>
+    64:           <% end %>
+    65:         </ul>
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:05:02 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (4.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.6ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to AddViewsCountToPosts (20240903140554)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (36.8ms)[0m  [1m[35mALTER TABLE "posts" ADD "views_count" integer DEFAULT 0[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240903140554') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_advisory_unlock(5006824864884655680)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:08:04 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (5.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (45.0ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 101.0ms | GC: 1.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 101.5ms | GC: 1.3ms)
+Completed 500 Internal Server Error in 121ms (ActiveRecord: 54.4ms (4 queries, 0 cached) | GC: 1.9ms)
+
+
+  
+ActionView::Template::Error (The asset "cookbook.jpg" is not present in the asset pipeline.
+):
+
+Causes:
+Sprockets::Rails::Helper::AssetNotFound (The asset "cookbook.jpg" is not present in the asset pipeline.
+)
+    66:       </div>
+    67:       <div class="new-cookbook">
+    68:         <h2>New Cookbook</h2>
+    69:         <%= image_tag 'cookbook.jpg', alt: "Friday Night Feast" %>
+    70:         <p>Friday Night Feast with Maggy Brown</p>
+    71:       </div>
+    72:     </div>
+  
+app/views/posts/index.html.erb:69
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:08:05 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:08:29 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (23.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 35.4ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 175.8ms | GC: 1.5ms)
+Completed 500 Internal Server Error in 221ms (ActiveRecord: 49.7ms (3 queries, 0 cached) | GC: 2.1ms)
+
+
+  
+LoadError (cannot load such file -- sassc):
+  
+app/views/layouts/application.html.erb:16
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:08:31 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:10:35 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (0.2ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 20.5ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 35.4ms | GC: 0.7ms)
+Completed 500 Internal Server Error in 63ms (ActiveRecord: 5.4ms (3 queries, 0 cached) | GC: 1.1ms)
+
+
+  
+LoadError (cannot load such file -- sassc):
+  
+app/views/layouts/application.html.erb:16
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:10:37 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:12:03 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (2.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 11.3ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 38.5ms | GC: 3.7ms)
+Completed 500 Internal Server Error in 41ms (ActiveRecord: 2.8ms (3 queries, 0 cached) | GC: 3.8ms)
+
+
+  
+LoadError (cannot load such file -- sassc):
+  
+app/views/layouts/application.html.erb:16
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:12:04 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:12:23 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (9.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:26
+  [1m[36mCategory Load (1.2ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:45
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 41.6ms | GC: 3.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 220.4ms | GC: 12.6ms)
+Completed 200 OK in 482ms (Views: 230.7ms | ActiveRecord: 67.6ms (3 queries, 0 cached) | GC: 90.5ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:12:25 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:12:49 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:24:52 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (0.6ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 134.8ms | GC: 10.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 164.7ms | GC: 17.3ms)
+Completed 200 OK in 296ms (Views: 168.1ms | ActiveRecord: 44.4ms (3 queries, 0 cached) | GC: 21.1ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:24:54 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:25:02 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (0.6ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (1.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 14.9ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 21.0ms | GC: 0.5ms)
+Completed 200 OK in 27ms (Views: 20.2ms | ActiveRecord: 2.0ms (3 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:25:20 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (1.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (0.5ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 16.0ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 53.7ms | GC: 0.7ms)
+Completed 200 OK in 56ms (Views: 51.9ms | ActiveRecord: 2.6ms (3 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:25:21 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:25:26 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (0.3ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 8.5ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.9ms | GC: 0.6ms)
+Completed 200 OK in 14ms (Views: 11.6ms | ActiveRecord: 1.0ms (3 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:25:27 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:25:53 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (5.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (27.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (0.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 49.9ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 57.8ms | GC: 1.0ms)
+Completed 200 OK in 62ms (Views: 25.7ms | ActiveRecord: 33.4ms (3 queries, 0 cached) | GC: 1.0ms)
+
+
+Started GET "/categories" for 127.0.0.1 at 2024-09-03 16:25:53 +0200
+Processing by CategoriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering categories/index.html.erb within layouts/application
+  Rendered categories/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.7ms | GC: 0.3ms)
+Completed 200 OK in 9ms (Views: 7.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:25:55 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (0.6ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 14.7ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 19.1ms | GC: 0.8ms)
+Completed 200 OK in 23ms (Views: 18.3ms | ActiveRecord: 1.5ms (3 queries, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:25:59 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (29.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 38.8ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 49.6ms | GC: 1.2ms)
+Completed 200 OK in 52ms (Views: 20.6ms | ActiveRecord: 30.0ms (3 queries, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:26:23 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (1.1ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (20.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 39.9ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 111.7ms | GC: 2.1ms)
+Completed 200 OK in 121ms (Views: 95.6ms | ActiveRecord: 22.7ms (3 queries, 0 cached) | GC: 2.7ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:26:25 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:27:37 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (5.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (0.3ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (1.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 20.4ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 114.8ms | GC: 8.4ms)
+Completed 200 OK in 117ms (Views: 107.7ms | ActiveRecord: 7.7ms (3 queries, 0 cached) | GC: 8.4ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:27:39 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:28:11 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:29
+  [1m[36mCategory Load (23.0ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:48
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:65
+  Rendered posts/index.html.erb within layouts/application (Duration: 46.0ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 51.4ms | GC: 0.5ms)
+Completed 200 OK in 55ms (Views: 28.3ms | ActiveRecord: 23.8ms (3 queries, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:28:12 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:29:35 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (23.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 39.4ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 89.0ms | GC: 3.3ms)
+Completed 200 OK in 135ms (Views: 67.3ms | ActiveRecord: 52.4ms (3 queries, 0 cached) | GC: 4.2ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:29:36 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:30:38 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 17.2ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 23.6ms | GC: 0.5ms)
+Completed 200 OK in 26ms (Views: 22.5ms | ActiveRecord: 1.7ms (3 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:30:39 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:31:07 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (124.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.5ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (3.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 140.8ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 178.0ms | GC: 0.7ms)
+Completed 500 Internal Server Error in 182ms (ActiveRecord: 129.1ms (3 queries, 0 cached) | GC: 0.7ms)
+
+
+  
+ActionView::Template::Error (Error: File to import not found or unreadable: font-awesome.
+        on line 2:1 of app/assets/stylesheets/application.scss
+>> @import "font-awesome";
+
+   ^
+):
+
+Causes:
+SassC::SyntaxError (Error: File to import not found or unreadable: font-awesome.
+        on line 2:1 of app/assets/stylesheets/application.scss
+>> @import "font-awesome";
+
+   ^
+)
+    13:     <link rel="icon" href="/icon.png" type="image/png">
+    14:     <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    15:     <link rel="apple-touch-icon" href="/icon.png">
+    16:     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    17:     <%= javascript_importmap_tags %>
+    18:   </head>
+    19: 
+  
+app/views/layouts/application.html.erb:16
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:31:10 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:31:20 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (18.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 30.2ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 52.8ms | GC: 0.7ms)
+Completed 500 Internal Server Error in 55ms (ActiveRecord: 19.0ms (3 queries, 0 cached) | GC: 0.9ms)
+
+
+  
+ActionView::Template::Error (Error: File to import not found or unreadable: font-awesome.
+        on line 2:1 of app/assets/stylesheets/application.scss
+>> @import "font-awesome";
+
+   ^
+):
+
+Causes:
+SassC::SyntaxError (Error: File to import not found or unreadable: font-awesome.
+        on line 2:1 of app/assets/stylesheets/application.scss
+>> @import "font-awesome";
+
+   ^
+)
+    13:     <link rel="icon" href="/icon.png" type="image/png">
+    14:     <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    15:     <link rel="apple-touch-icon" href="/icon.png">
+    16:     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    17:     <%= javascript_importmap_tags %>
+    18:   </head>
+    19: 
+  
+app/views/layouts/application.html.erb:16
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-03 16:31:22 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:32:06 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (6.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (24.7ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 1927.6ms | GC: 23.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 1980.6ms | GC: 31.3ms)
+Completed 200 OK in 2297ms (Views: 1970.0ms | ActiveRecord: 142.3ms (3 queries, 0 cached) | GC: 117.9ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:32:10 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:33:49 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (2.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.6ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 43.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2394.8ms | GC: 0.0ms)
+Completed 200 OK in 2418ms (Views: 2395.5ms | ActiveRecord: 3.7ms (3 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:33:53 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:34:18 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:35:32 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (1.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.8ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 12.8ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 1595.8ms | GC: 12.2ms)
+Completed 200 OK in 1598ms (Views: 1594.3ms | ActiveRecord: 2.4ms (3 queries, 0 cached) | GC: 12.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:35:35 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:36:54 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (5.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 16.4ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 1909.9ms | GC: 7.3ms)
+Completed 200 OK in 1912ms (Views: 1904.3ms | ActiveRecord: 6.0ms (3 queries, 0 cached) | GC: 7.3ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:36:58 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:37:26 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (25.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.5ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 37.8ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 50.8ms | GC: 1.2ms)
+Completed 200 OK in 53ms (Views: 25.0ms | ActiveRecord: 26.4ms (3 queries, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:37:27 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:37:33 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (13.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 27.2ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 43.0ms | GC: 2.0ms)
+Completed 200 OK in 46ms (Views: 29.4ms | ActiveRecord: 14.2ms (3 queries, 0 cached) | GC: 2.5ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:37:34 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:37:36 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (14.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.3ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 20.7ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 2366.6ms | GC: 5.4ms)
+Completed 200 OK in 2369ms (Views: 2353.1ms | ActiveRecord: 14.7ms (3 queries, 0 cached) | GC: 5.4ms)
+
+
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:38:14 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.8ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (30.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 61.9ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 2445.5ms | GC: 5.1ms)
+Completed 200 OK in 2447ms (Views: 2414.2ms | ActiveRecord: 31.9ms (3 queries, 0 cached) | GC: 5.2ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:38:18 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts" for 127.0.0.1 at 2024-09-03 16:38:20 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (13.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 24.4ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 37.4ms | GC: 0.9ms)
+Completed 200 OK in 41ms (Views: 23.9ms | ActiveRecord: 14.3ms (3 queries, 0 cached) | GC: 1.3ms)
+
+
+Started GET "/" for 127.0.0.1 at 2024-09-03 16:38:22 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (9.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.4ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 18.7ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 27.2ms | GC: 0.7ms)
+Completed 200 OK in 29ms (Views: 17.8ms | ActiveRecord: 10.0ms (3 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 16:38:23 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts?q=marketing" for 127.0.0.1 at 2024-09-03 16:38:38 +0200
+Processing by PostsController#index as HTML
+  Parameters: {"q"=>"marketing"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (0.5ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 11.0ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 23.6ms | GC: 1.0ms)
+Completed 200 OK in 27ms (Views: 24.0ms | ActiveRecord: 1.2ms (3 queries, 0 cached) | GC: 1.6ms)
+
+
+Started GET "/posts?q=marketing" for 127.0.0.1 at 2024-09-03 18:10:38 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (2.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Parameters: {"q"=>"marketing"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mCategory Load (1.0ms)[0m  [1m[34mSELECT "categories".* FROM "categories"[0m
+  ↳ app/views/posts/index.html.erb:49
+  [1m[36mPost Load (0.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:66
+  Rendered posts/index.html.erb within layouts/application (Duration: 62.7ms | GC: 2.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 140.8ms | GC: 10.0ms)
+Completed 200 OK in 328ms (Views: 163.7ms | ActiveRecord: 18.4ms (3 queries, 0 cached) | GC: 16.9ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 18:10:41 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts?q=marketing" for 127.0.0.1 at 2024-09-03 18:21:27 +0200
+Processing by PostsController#index as HTML
+  Parameters: {"q"=>"marketing"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (1.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 23.3ms | GC: 1.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 118.7ms | GC: 7.1ms)
+Completed 200 OK in 216ms (Views: 120.7ms | ActiveRecord: 48.3ms (2 queries, 0 cached) | GC: 9.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 18:21:31 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/categories" for 127.0.0.1 at 2024-09-03 18:21:31 +0200
+Processing by CategoriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering categories/index.html.erb within layouts/application
+  Rendered categories/index.html.erb within layouts/application (Duration: 17.2ms | GC: 0.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 133.5ms | GC: 12.5ms)
+Completed 200 OK in 153ms (Views: 137.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 12.5ms)
+
+
+Started GET "/posts?q=marketing" for 127.0.0.1 at 2024-09-03 18:33:06 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (28.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Parameters: {"q"=>"marketing"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 46.4ms | GC: 0.9ms)
+  Rendered layout layouts/application.html.erb (Duration: 129.6ms | GC: 9.2ms)
+Completed 200 OK in 303ms (Views: 111.5ms | ActiveRecord: 32.2ms (2 queries, 0 cached) | GC: 11.2ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 18:33:08 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/categories" for 127.0.0.1 at 2024-09-03 18:33:38 +0200
+Processing by CategoriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering categories/index.html.erb within layouts/application
+  Rendered categories/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 13.0ms | GC: 0.5ms)
+Completed 200 OK in 18ms (Views: 15.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/categories" for 127.0.0.1 at 2024-09-03 18:33:51 +0200
+Processing by CategoriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering categories/index.html.erb within layouts/application
+  Rendered categories/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 30.3ms | GC: 0.3ms)
+Completed 200 OK in 35ms (Views: 31.5ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/posts?q=marketing" for 127.0.0.1 at 2024-09-03 18:35:37 +0200
+Processing by PostsController#index as HTML
+  Parameters: {"q"=>"marketing"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (3.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (25.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 67.6ms | GC: 2.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2196.1ms | GC: 16.6ms)
+Completed 200 OK in 2221ms (Views: 2171.9ms | ActiveRecord: 28.1ms (2 queries, 0 cached) | GC: 16.6ms)
+
+
+  
+ActionController::RoutingError (No route matches [GET] "/assets/application-437fb399be8b8f7592999597633e8fc8778db287abc5b4a5e0636d2816858565.css"):
+  
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 18:35:43 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/posts?q=marketing" for 127.0.0.1 at 2024-09-03 18:35:48 +0200
+Processing by PostsController#index as HTML
+  Parameters: {"q"=>"marketing"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (10.8ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (0.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 19.0ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 29.9ms | GC: 1.0ms)
+Completed 200 OK in 32ms (Views: 19.2ms | ActiveRecord: 11.4ms (2 queries, 0 cached) | GC: 1.0ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-09-03 18:35:49 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/categories" for 127.0.0.1 at 2024-09-03 18:35:52 +0200
+Processing by CategoriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering categories/index.html.erb within layouts/application
+  Rendered categories/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 13.2ms | GC: 2.6ms)
+Completed 200 OK in 15ms (Views: 13.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 2.7ms)
+
+
+Started GET "/categories" for 127.0.0.1 at 2024-09-03 18:35:53 +0200
+Processing by CategoriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering categories/index.html.erb within layouts/application
+  Rendered categories/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.0ms | GC: 1.2ms)
+Completed 200 OK in 12ms (Views: 11.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/" for ::1 at 2024-09-05 10:03:46 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (3.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (4.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 926.2ms | GC: 20.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 1164.1ms | GC: 30.6ms)
+Completed 200 OK in 1606ms (Views: 1037.5ms | ActiveRecord: 184.4ms (2 queries, 0 cached) | GC: 30.6ms)
+
+
+Started GET "/" for ::1 at 2024-09-05 11:46:17 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (2.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (2.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 2207.9ms | GC: 13.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 2319.8ms | GC: 17.8ms)
+Completed 200 OK in 2398ms (Views: 2001.4ms | ActiveRecord: 335.5ms (2 queries, 0 cached) | GC: 17.8ms)
+
+
+Started GET "/" for ::1 at 2024-09-05 12:03:25 +0200
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (1.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (0.9ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 381.1ms | GC: 22.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 546.2ms | GC: 43.5ms)
+Completed 200 OK in 606ms (Views: 475.5ms | ActiveRecord: 74.4ms (2 queries, 0 cached) | GC: 43.5ms)
+
+
+Started GET "/" for ::1 at 2024-09-09 12:22:25 +0200
+Started GET "/" for ::1 at 2024-09-09 12:22:25 +0200
+  [1m[36mActiveRecord::SchemaMigration Load (71.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+Processing by PostsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (6.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  [1m[36mPost Load (32.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 390.5ms | GC: 13.1ms)
+  [1m[36mPost Load (5.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."featured" = $1 LIMIT $2[0m  [["featured", true], ["LIMIT", 3]]
+  ↳ app/views/posts/index.html.erb:30
+  Rendered layout layouts/application.html.erb (Duration: 459.6ms | GC: 21.7ms)
+Completed 200 OK in 831ms (Views: 433.0ms | ActiveRecord: 180.0ms (2 queries, 0 cached) | GC: 109.2ms)
+
+
+  [1m[36mPost Load (32.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."views_count" DESC LIMIT $1[0m  [["LIMIT", 4]]
+  ↳ app/views/posts/index.html.erb:62
+  Rendered posts/index.html.erb within layouts/application (Duration: 394.7ms | GC: 10.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 410.9ms | GC: 10.6ms)
+Completed 200 OK in 916ms (Views: 305.6ms | ActiveRecord: 240.3ms (2 queries, 0 cached) | GC: 109.7ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-09-09 12:22:29 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
